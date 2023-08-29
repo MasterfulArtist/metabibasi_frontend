@@ -1,27 +1,61 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+import {HomeComponent} from './home/home.component';
+import {AccountListComponent} from "./account-management/account-list/account-list.component";
+import {AuthGuardService, CanActivateAdmin, CanActivateUser} from "./_services/auth-guard.service";
+import {AccountDetailComponent} from "./account-management/account-detail/account-detail.component";
+import {AccountCreateComponent} from "./account-management/account-create/account-create.component";
+import {VehicleSellComponent} from "./vehicle-management/vehicle-sell/vehicle-sell.component";
+import {SinalagiListComponent} from "./vehicle-management/sinalagi-list/sinalagi-list.component";
+import {MyCarListComponent} from "./vehicle-management/my-car-list/my-car-list.component";
+import {CreateCarComponent} from "./vehicle-management/create-car/create-car.component";
 
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'user', component: BoardUserComponent },
-  { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
+  {path: 'account-list', component: AccountListComponent, canActivate: [CanActivateAdmin]},
+  {
+    path: 'account-list/edit/:id',
+    component: AccountDetailComponent,
+    canActivate: [CanActivateAdmin]
+  },
+  {
+    path: 'account-list/create',
+    component: AccountCreateComponent,
+    canActivate: [CanActivateAdmin]
+  },
+  {
+    path: 'vehicle-sell',
+    component: VehicleSellComponent,
+    canActivate: [CanActivateUser]
+  },
+  {
+    path: 'sinalagi-list',
+    component: SinalagiListComponent,
+    canActivate: [CanActivateUser]
+  },
+  {
+    path: 'my-car-list',
+    component: MyCarListComponent,
+    canActivate: [CanActivateUser]
+  },
+  {
+    path: 'my-car-list/create-car',
+    component: CreateCarComponent,
+    canActivate: [CanActivateUser]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    CanActivateUser,
+    CanActivateAdmin,
+  ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

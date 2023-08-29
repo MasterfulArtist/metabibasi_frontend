@@ -1,0 +1,168 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title> Sell a Vehicle</mat-card-title>
+
+  </mat-card-header>
+
+  <mat-card-content>
+    <ng-container *ngIf="!renderSteps">
+      <br>
+      <br>
+      You have no car to sell.
+    </ng-container>
+    <mat-horizontal-stepper #stepper *ngIf="renderSteps" [linear]="isLinear" labelPosition="bottom"
+    >
+      <mat-step [stepControl]="selectVehicleFormGroup">
+        <ng-template matStepLabel>Select Vehicle</ng-template>
+        <div class="col col-lg-6" style="margin:30px 0 50px 0">
+          <p>Select the Vehicle you want to sell.</p>
+        </div>
+        <form [formGroup]="selectVehicleFormGroup">
+          <table [dataSource]="vehicleDataSource" mat-table>
+
+            <ng-container matColumnDef="vehicleID">
+              <th *matHeaderCellDef mat-header-cell><b>ID</b></th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.id }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pinakida">
+              <th *matHeaderCellDef mat-header-cell><b>PINAKIDA</b></th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.pinakida }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="checkcolumn">
+              <th *matHeaderCellDef mat-header-cell><b>Select</b></th>
+              <td *matCellDef="let element" mat-cell>
+                <mat-checkbox (change)="$event ? toggleCover(element) : null"
+                              (click)="$event.stopPropagation();"
+                              [checked]="selectionVehicle.isSelected(element) "
+                              [formControlName]="'vehicle' + element.id.toString()"
+                              color="primary">
+                </mat-checkbox>
+
+              </td>
+            </ng-container>
+            <tr *matHeaderRowDef="displayedColumnsVehicleSelection" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumnsVehicleSelection;" mat-row></tr>
+          </table>
+        </form>
+        <mat-paginator
+          (page)="vehiclePageChange($event,'vehicle')"
+          [length]="length"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="pageSizeOptions"
+          [pageSize]="pageSize"
+          [showFirstLastButtons]="showFirstLastButtons"
+        >
+        </mat-paginator>
+        <div class="stepper-action-buttons">
+          <button color="primary" mat-raised-button matStepperPrevious style="margin-right: 5px">Back</button>
+          <button [disabled]="selectionVehicle.isEmpty()" color="primary" mat-raised-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="selectDTForm">
+        <ng-template matStepLabel>Select Department of Transport</ng-template>
+        <div class="col col-lg-6" style="margin:30px 0 50px 0">
+          <p>Please add the name of the department of transport to handle the transfer car licence. </p>
+        </div>
+        <form [formGroup]="selectDTForm">
+          <div class="row">
+            <div class="col-12" style="text-align: left;">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="mat-form-input-text">
+                  <input formControlName="dpName" matInput type="text">
+                  <mat-error class="mat-error-message">
+                    <div *ngIf="selectDTForm.status === 'INVALID' ">
+                      Department of Transport is required
+                    </div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="stepper-action-buttons" style="margin-top: 50px;">
+          <button color="primary" mat-raised-button matStepperPrevious style="margin-right: 5px">Back</button>
+          <button color="primary" mat-raised-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="selectBuyerForm">
+        <ng-template matStepLabel>Select Buyer</ng-template>
+        <div class="col col-lg-6" style="margin:30px 0 50px 0">
+          <p>Please select the buyer you want to whom you want to sell the car. </p>
+        </div>
+        <form [formGroup]="selectBuyerForm">
+          <ng-container>
+            <mat-form-field appearance="outline" class="buyer-form-field">
+              <mat-label>Account Type</mat-label>
+              <mat-select formControlName="buyerControl">
+                <mat-option *ngFor="let buyer of buyers" [value]="buyer">
+                  {{buyer.username}} - {{buyer.afm}}
+                </mat-option>
+              </mat-select>
+              <!--            <mat-error class="mat-error-message">-->
+              <!--              <div *ngIf="selectBuyerForm.controls['buyer']?.errors?.required">-->
+              <!--                Role is required-->
+              <!--              </div>-->
+              <!--            </mat-error>-->
+            </mat-form-field>
+          </ng-container>
+        </form>
+        <div class="stepper-action-buttons" style="margin-top: 50px;">
+          <button color="primary" mat-raised-button matStepperPrevious style="margin-right: 5px">Back</button>
+          <button color="primary" mat-raised-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <div class="show-wizard-end">
+          <p>Please ensure all information is accurate prior to submitting your application.</p>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-12 col-sm-6" style="text-align: left;">
+            <div>
+              <p><b> Buyer's VAT: </b>
+                <b style="color: #fa4776"> {{selectBuyerForm.controls['buyerControl'].value.afm}} </b>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-6" style="text-align: left;">
+            <div>
+              <p><b> CAR: </b>
+                <b style="color: #fa4776"> {{selectionVehicle.selected[0]?.pinakida}} </b>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6" style="text-align: left;">
+            <div>
+              <p><b> Department of Transport: </b>
+                <b style="color: #fa4776"> {{selectDTForm.controls['dpName'].value}} </b>
+              </p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="stepper-action-buttons">
+          <button color="primary" mat-raised-button matStepperPrevious style="margin-right: 5px">Back
+          </button>
+          <button (click)="onSubmit()" class="form-submit"
+                  color="primary" mat-raised-button matStepperNext>Done
+          </button>
+        </div>
+      </mat-step>
+
+
+    </mat-horizontal-stepper>
+  </mat-card-content>
+</mat-card>

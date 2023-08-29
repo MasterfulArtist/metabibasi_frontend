@@ -1,0 +1,71 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{title}}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input (change)="changeLogin(account.username)" [(ngModel)]="account.username" data-id="user.username" matInput
+             maxlength="255"
+             required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input [(ngModel)]="account.email" data-id="user.email" matInput maxlength="255" required/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input [(ngModel)]="account.firstname" data-id="user.firstname" matInput maxlength="255" required/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input [(ngModel)]="account.lastname" data-id="user.lastname" matInput maxlength="255" required/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>VAT</mat-label>
+      <input [(ngModel)]="account.afm" data-id="user.afm" matInput maxlength="255" required/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Choose a Role</mat-label>
+      <mat-icon matSuffix>person_pin</mat-icon>
+      <mat-select [(ngModel)]="selectedValue" name="role">
+        <mat-option *ngFor="let item of roles" [value]="item.value">
+          {{item.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input [(ngModel)]="newPassword" autocomplete="new-password" data-id="user.newPassword" matInput maxlength="100"
+             minlength="3" required type="password"/>
+      <mat-error *ngIf="hasMinLengthError(newPassword)">
+        Password must be at least 3 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Confirm password</mat-label>
+      <input [(ngModel)]="confirmPassword" data-id="user.confirmPassword" matInput maxlength="100"
+             minlength="3" required type="password"/>
+      <mat-error *ngIf="hasMinLengthError(confirmPassword)">
+        Password must be at least 3 characters.
+      </mat-error>
+      <mat-error *ngIf="hasConfirmPasswordError()">
+        Password does not match the confirm password.
+      </mat-error>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button (click)="create()" [disabled]="isDisabled()" color="primary" mat-raised-button style="margin-left: 8px">
+      Create Account
+    </button>
+  </mat-card-actions>
+</mat-card>

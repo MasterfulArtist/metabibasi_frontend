@@ -1,0 +1,25 @@
+div.context-section {
+  padding: 0;
+}
+
+div.context-section > .mat-card {
+  box-shadow: none;
+}
+
+.mat-card-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-card-container > * {
+  width: 100%;
+}
+
+.mat-card-container .mat-card {
+  margin-bottom: 24px;
+}
+
+.button-container {
+  display: inline-block;
+  margin-right: 10px; /* Adjust this value as needed */
+}

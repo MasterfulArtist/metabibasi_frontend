@@ -1,0 +1,48 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+
+    <a class="navbar-brand" routerLink="home" style="margin-top: -10px;margin-right: 50px;">
+      <img [src]="['assets/metabibasi_logo.jpg']"/>
+    </a>
+
+    <button mat-button routerLink="home" title="HomePage">Homepage</button>
+
+    <button *ngIf="userToken.roles.indexOf('ROLE_ADMIN') === -1"
+            mat-button routerLink="my-car-list" title="Dashboard">My Cars
+    </button>
+
+    <button *ngIf="userToken.roles.indexOf('ROLE_ADMIN') === -1"
+            [matMenuTriggerFor]="buySellMenu" mat-button>Buy/Sell
+    </button>
+
+    <mat-menu #buySellMenu="matMenu" [overlapTrigger]="false">
+      <ng-template matMenuContent>
+        <button *ngIf="userToken.roles.indexOf('ROLE_POLITIS') !== -1"
+                mat-menu-item routerLink="vehicle-sell">Sell a Vehicle
+        </button>
+        <button mat-menu-item routerLink="sinalagi-list">View/Edit Applications</button>
+      </ng-template>
+
+    </mat-menu>
+
+    <button *ngIf="userToken.roles.indexOf('ROLE_ADMIN') !== -1"
+            [matMenuTriggerFor]="adminMenu" mat-button>Admin
+    </button>
+
+    <mat-menu #adminMenu="matMenu" [overlapTrigger]="false">
+      <ng-template matMenuContent>
+        <button mat-menu-item routerLink="account-list">Accounts</button>
+      </ng-template>
+    </mat-menu>
+
+    <button [matMenuTriggerFor]="settingMenu" mat-button>{{ userToken.username }}</button>
+    <mat-menu #settingMenu="matMenu" [overlapTrigger]="false">
+      <ng-template matMenuContent>
+        <button class="disabled" disabled="disabled" mat-menu-item>Signed in as {{ userToken.username }}</button>
+        <button (click)="logout()" mat-menu-item>Logout</button>
+      </ng-template>
+    </mat-menu>
+
+  </mat-toolbar-row>
+
+</mat-toolbar>

@@ -1,0 +1,69 @@
+<div class="context-section">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> My Cars</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-actions style="display: flex; justify-content: flex-end;">
+      <button *ngIf="isSeller" color="primary" mat-raised-button routerLink="create-car">
+        Create Car
+      </button>
+    </mat-card-actions>
+
+    <mat-card-content class="mat-card-container">
+      <div class="mat-elevation-z1">
+        <table [dataSource]="dataSource" mat-table>
+
+          <ng-container matColumnDef="id">
+            <th *matHeaderCellDef mat-header-cell><b>ID</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.id }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="pinakida">
+            <th *matHeaderCellDef mat-header-cell><b>Pinakida IXE</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.pinakida }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="discard">
+            <th *matHeaderCellDef mat-header-cell><b>Delete</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <span
+                [matTooltip]="element.is_deletable ? 'It can be deleted' : 'There is an application. Please remove it first.'"
+              >
+              <button (click)="discard(element)" [disabled]="!element.is_deletable" mat-icon-button
+              >
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+                </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="downloadAK">
+            <th *matHeaderCellDef mat-header-cell><b>Download A.K.</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <button (click)="downloadAdeia(element)" mat-icon-button>
+                <mat-icon>cloud_download</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+        </table>
+
+        <mat-paginator
+          (page)="paginatorChange($event)"
+          [length]="length"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="pageSizeOptions"
+          [pageSize]="pageSize"
+          [showFirstLastButtons]="showFirstLastButtons"></mat-paginator>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>

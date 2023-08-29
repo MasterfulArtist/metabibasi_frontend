@@ -1,0 +1,106 @@
+<div class="context-section">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Application List</mat-card-title>
+    </mat-card-header>
+
+
+    <mat-card-content class="mat-card-container">
+      <div class="mat-elevation-z1">
+        <table [dataSource]="dataSource" mat-table>
+
+          <ng-container matColumnDef="sinalagiId">
+            <th *matHeaderCellDef mat-header-cell><b>ID</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.id }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="pinakida">
+            <th *matHeaderCellDef mat-header-cell><b>Pinakida IXE</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.oxima_pinakida }}
+            </td>
+          </ng-container>
+
+          <ng-container *ngIf="isSeller" matColumnDef="buyerinfo">
+            <th *matHeaderCellDef mat-header-cell><b>Buyer's Name and VAT</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.buyer_username }} / {{ element.buyer_afm }}
+            </td>
+          </ng-container>
+
+          <ng-container *ngIf="!isSeller" matColumnDef="sellerinfo">
+            <th *matHeaderCellDef mat-header-cell><b>Seller's Name and VAT</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.seller_username }} / {{ element.seller_afm }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dpName">
+            <th *matHeaderCellDef mat-header-cell><b>Department of Transport</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.periferia }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef mat-header-cell><b>Application Status</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.status }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="discard">
+            <th *matHeaderCellDef mat-header-cell><b>Cancel Application</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <span
+                [matTooltip]="element.status!=='COMPLETED' ? 'It can be canceled' : 'Application has been completed'"
+              >
+              <button (click)="discard(element)"
+                      [disabled]="element.status==='COMPLETED'" mat-icon-button>
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+                </span>
+            </td>
+          </ng-container>
+
+
+          <ng-container *ngIf="!isSeller" matColumnDef="accept">
+            <th *matHeaderCellDef mat-header-cell><b>Accept Application</b></th>
+            <td *matCellDef="let element" mat-cell>
+               <span
+                 [matTooltip]="element.status==='COMPLETED' ? 'Application has been completed' : 'Accept'">
+              <button (click)="accept(element)"
+                      [disabled]="element.status==='COMPLETED'" mat-icon-button>
+                <mat-icon>check_circle_outline</mat-icon>
+              </button>
+               </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="historyRemove">
+            <th *matHeaderCellDef mat-header-cell><b>Remove from history</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <button (click)="removeFromHistory(element)"
+                      [hidden]="element.status!=='COMPLETED'" mat-icon-button>
+                <mat-icon>history</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+        </table>
+
+        <mat-paginator
+          (page)="paginatorChange($event)"
+          [length]="length"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="pageSizeOptions"
+          [pageSize]="pageSize"
+          [showFirstLastButtons]="showFirstLastButtons"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

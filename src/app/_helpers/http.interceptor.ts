@@ -20,16 +20,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error) => {
-        // logout when token is expired
-/*
-        if (
-          error instanceof HttpErrorResponse &&
-          !req.url.includes('auth/signin') &&
-          error.status === 401
-        ) {
-          return this.handle401Error(req, next);
-        }
-*/
         return throwError(() => error);
       })
     );

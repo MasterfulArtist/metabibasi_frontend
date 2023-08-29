@@ -1,0 +1,110 @@
+<div class="context-section">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Account List</mat-card-title>
+
+    </mat-card-header>
+
+    <mat-card>
+      <mat-card-content class="mat-card-container" fxLayout="row">
+        <div class="container-fluid" style="padding: 0;">
+          <div class="row">
+            <div class="col-md-2 col-sm-12">
+              <mat-form-field>
+                <input [(ngModel)]="usernameFilter" matInput placeholder="Username">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxFlex></div>
+
+      </mat-card-content>
+      <mat-card-actions style="display: flex; justify-content: space-between; align-items: center;">
+        <button (click)="search()" color="primary" mat-raised-button type="submit">
+          <mat-icon>search</mat-icon>
+          Search
+        </button>
+        <button color="primary" mat-raised-button (click)="openCreateAccountDialog()">
+          Create Account
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card-content class="mat-card-container">
+      <div class="mat-elevation-z1">
+        <table [dataSource]="dataSource" mat-table>
+
+          <ng-container matColumnDef="loginId">
+            <th *matHeaderCellDef mat-header-cell><b>ID</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <a routerLink="edit/{{ element.id }}"> {{ element.id }} </a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="username">
+            <th *matHeaderCellDef mat-header-cell><b>Username</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.username }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="firstName">
+            <th *matHeaderCellDef mat-header-cell><b>First Name</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.firstname }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="lastName">
+            <th *matHeaderCellDef mat-header-cell><b>Last Name</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.lastname }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="afm">
+            <th *matHeaderCellDef mat-header-cell><b>VAT</b></th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.afm }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="role">
+            <th *matHeaderCellDef mat-header-cell><b>Role</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <div *ngIf="element.roles[0].name === 'ROLE_ADMIN'">
+                Admin
+              </div>
+              <div *ngIf="element.roles[0].name === 'ROLE_POLITIS'">
+                Seller
+              </div>
+              <div *ngIf="element.roles[0].name === 'ROLE_AGORASTIS'">
+                Buyer
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="discard">
+            <th *matHeaderCellDef mat-header-cell><b>Delete</b></th>
+            <td *matCellDef="let element" mat-cell>
+              <button (click)="discard(element)" mat-icon-button>
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+        </table>
+
+        <mat-paginator
+          (page)="paginatorChange($event)"
+          [length]="length"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="pageSizeOptions"
+          [pageSize]="pageSize"
+          [showFirstLastButtons]="showFirstLastButtons"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

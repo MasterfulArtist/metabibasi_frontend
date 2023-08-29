@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Create New Car</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-form-field>
+      <mat-label>Pinakida</mat-label>
+      <input (change)="changePinakida(vehicle.pinakida)" [(ngModel)]="vehicle.pinakida"
+             data-id="user.pinakida" matInput maxlength="255"
+             required>
+    </mat-form-field>
+
+    <mat-card-actions>
+      <button (click)="create()" [disabled]="isDisabled()" color="primary" mat-raised-button style="margin-left: 8px">
+        Create Car
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>
